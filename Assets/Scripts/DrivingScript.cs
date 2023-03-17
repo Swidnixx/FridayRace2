@@ -21,17 +21,14 @@ public class DrivingScript : MonoBehaviour
         rb.centerOfMass = centerOfMass.localPosition;
     }
 
-    private void Update()
+    public void Drive(float accel, float steer, float brake)
     {
         speed = rb.velocity.magnitude * 3.6f;
 
-        float steer = Input.GetAxis("Horizontal");
-        float accel = Input.GetAxis("Vertical");
-        if( speed > maxSpeed )
+        if ( speed > maxSpeed )
         {
             accel = 0;
         }
-        float brake = Input.GetAxisRaw("Jump");
 
         foreach( var w in wheels )
         {
@@ -43,5 +40,31 @@ public class DrivingScript : MonoBehaviour
                 w.wheelCollider.steerAngle = steer * maxSteerAngle;
             }
         }
+
+        EngineSound(accel);
+    }
+
+    public AudioSource engineAudioSource;
+    public float minPitch = 0.55f;
+    public float maxPitch = 1.1f;
+    public float gearChangeTime = 5;
+    float accelTime;
+    void EngineSound(float accel)
+    {
+        accel = Mathf.Abs(accel);
+
+        if( accel > 0 )
+        {
+            accelTime += Time.deltaTime;
+            accelTime = Mathf.Min( accelTime, gearChangeTime );
+        }
+        else
+        {
+            accelTime -= Time.deltaTime;
+            accelTime = Mathf.Max( accelTime, 0 );
+        }
+
+        float normalizedAccelTime = accelTime / gearChangeTime;
+        engineAudioSource.pitch = Mathf.Lerp(minPitch, maxPitch, normalizedAccelTime);
     }
 }
