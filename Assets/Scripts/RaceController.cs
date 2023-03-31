@@ -9,16 +9,44 @@ public class RaceController : MonoBehaviour
 
     public int timer = 3;
 
+    public ChceckPointController[] carsController;
+
     private void Start()
     {
         InvokeRepeating(nameof(CountDown), 3, 1);
+
+        GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
+        carsController = new ChceckPointController[cars.Length];
+        for (int i = 0; i < cars.Length; i++)
+        {
+            carsController[i] = cars[i].GetComponent<ChceckPointController>();
+        }
+    }
+
+    private void LateUpdate()
+    {
+        int fishedLap = 0;
+        foreach (ChceckPointController controller in carsController)
+        {
+            if (controller.lap == totalLaps + 1)
+            {
+                fishedLap++;
+            }
+
+            if (fishedLap == carsController.Length && racePending)
+            {
+                Debug.Log("Koniec wyÅ›cigu !");
+                racePending = false;
+            }
+
+        }
     }
 
     void CountDown()
     {
-        if(timer > 0)
+        if (timer > 0)
         {
-            Debug.Log("Rozpoczêcie wyœcigu za: " + timer);
+            Debug.Log("RozpoczÄ™cie wyÅ›cigu za: " + timer);
             timer--;
         }
         else
