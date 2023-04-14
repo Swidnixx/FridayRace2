@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RaceController : MonoBehaviour
 {
@@ -11,15 +13,42 @@ public class RaceController : MonoBehaviour
 
     public ChceckPointController[] carsController;
 
+    public TextMeshProUGUI startText;
+    public GameObject startPanel;
+    public GameObject finishPanel;
+
     private void Start()
     {
+        startPanel.SetActive(true);
+        finishPanel.SetActive(false);
+
         InvokeRepeating(nameof(CountDown), 3, 1);
+        startText.text = timer.ToString();
 
         GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
         carsController = new ChceckPointController[cars.Length];
         for (int i = 0; i < cars.Length; i++)
         {
             carsController[i] = cars[i].GetComponent<ChceckPointController>();
+        }
+    }
+    void CountDown()
+    {
+        if (timer > 1)
+        {
+            timer--;
+            startText.text = timer.ToString();
+        }
+        else if( timer > 0)
+        {
+            startText.text = "START!";
+            racePending = true;
+            timer--;
+        }
+        else
+        {
+            CancelInvoke();
+            startPanel.SetActive(false);
         }
     }
 
@@ -32,28 +61,17 @@ public class RaceController : MonoBehaviour
             {
                 fishedLap++;
             }
+        }
 
-            if (fishedLap == carsController.Length && racePending)
-            {
-                Debug.Log("Koniec wyścigu !");
-                racePending = false;
-            }
-
+        if (fishedLap == carsController.Length && racePending)
+        {
+            finishPanel.SetActive(true);
+            racePending = false;
         }
     }
 
-    void CountDown()
+    public void RestartRace()
     {
-        if (timer > 0)
-        {
-            Debug.Log("Rozpoczęcie wyścigu za: " + timer);
-            timer--;
-        }
-        else
-        {
-            Debug.Log("Start");
-            racePending = true;
-            CancelInvoke();
-        }
+        SceneManager.LoadScene( SceneManager.GetActiveScene().name );
     }
 }
