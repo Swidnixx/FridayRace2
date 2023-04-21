@@ -11,7 +11,7 @@ public class RaceController : MonoBehaviour
 
     public int timer = 3;
 
-    public ChceckPointController[] carsController;
+    public CheckPointController[] carsController;
 
     public TextMeshProUGUI startText;
     public GameObject startPanel;
@@ -26,10 +26,10 @@ public class RaceController : MonoBehaviour
         startText.text = timer.ToString();
 
         GameObject[] cars = GameObject.FindGameObjectsWithTag("Car");
-        carsController = new ChceckPointController[cars.Length];
+        carsController = new CheckPointController[cars.Length];
         for (int i = 0; i < cars.Length; i++)
         {
-            carsController[i] = cars[i].GetComponent<ChceckPointController>();
+            carsController[i] = cars[i].GetComponent<CheckPointController>();
         }
     }
     void CountDown()
@@ -55,9 +55,9 @@ public class RaceController : MonoBehaviour
     private void LateUpdate()
     {
         int fishedLap = 0;
-        foreach (ChceckPointController controller in carsController)
+        foreach (CheckPointController controller in carsController)
         {
-            if (controller.lap == totalLaps + 1)
+            if (controller.Lap == totalLaps + 1)
             {
                 fishedLap++;
             }
