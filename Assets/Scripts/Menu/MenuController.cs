@@ -17,14 +17,14 @@ public class MenuController : MonoBehaviour
 
     private void Start()
     {
-        sliderR.onValueChanged.AddListener(OnColorChanged);
-        sliderG.onValueChanged.AddListener(OnColorChanged);
-        sliderB.onValueChanged.AddListener(OnColorChanged);
-
         sliderR.value = PlayerPrefs.GetFloat("R");
         sliderG.value = PlayerPrefs.GetFloat("G");
         sliderB.value = PlayerPrefs.GetFloat("B");
         OnColorChanged(0);
+
+        sliderR.onValueChanged.AddListener(OnColorChanged);
+        sliderG.onValueChanged.AddListener(OnColorChanged);
+        sliderB.onValueChanged.AddListener(OnColorChanged);
 
         nicknameText.text = PlayerPrefs.GetString("Nickname");
         if(nicknameText.text == "")

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -19,8 +20,14 @@ public class RaceController : MonoBehaviour
 
     private void Start()
     {
-        startPanel.SetActive(true);
+        startPanel.SetActive(false);
         finishPanel.SetActive(false);
+    }
+
+    [PunRPC] //Zdalne uruchomienie procedury
+    private void StartRace()
+    {
+        startPanel.SetActive(true);
 
         InvokeRepeating(nameof(CountDown), 3, 1);
         startText.text = timer.ToString();
@@ -54,16 +61,16 @@ public class RaceController : MonoBehaviour
 
     private void LateUpdate()
     {
-        int fishedLap = 0;
+        int finishers = 0;
         foreach (CheckPointController controller in carsController)
         {
             if (controller.Lap == totalLaps + 1)
             {
-                fishedLap++;
+                finishers++;
             }
         }
 
-        if (fishedLap == carsController.Length && racePending)
+        if (finishers == carsController.Length && racePending)
         {
             finishPanel.SetActive(true);
             racePending = false;
