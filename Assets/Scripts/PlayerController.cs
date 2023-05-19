@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
         if (RaceController.racePending == false)
         {
             accel = 0;
+            return;
         }
 
         ds.Drive(accel, steer, brake);

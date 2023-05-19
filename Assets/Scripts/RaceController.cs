@@ -1,12 +1,15 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RaceController : MonoBehaviour
+public class RaceController : MonoBehaviourPunCallbacks
 {
+    public static event Action RaceStarted;
+
     public static bool racePending = false;
     public static int totalLaps = 1;
 
@@ -24,9 +27,16 @@ public class RaceController : MonoBehaviour
         finishPanel.SetActive(false);
     }
 
+    public void StartRaceButton()
+    {
+        photonView.RPC(nameof(StartRace), RpcTarget.All, null);
+    }
+
     [PunRPC] //Zdalne uruchomienie procedury
     private void StartRace()
     {
+        RaceStarted?.Invoke();
+
         startPanel.SetActive(true);
 
         InvokeRepeating(nameof(CountDown), 3, 1);
