@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,10 +44,8 @@ public class PlayerSpawner : MonoBehaviour
 
         //Local Player Setup
         car.GetComponent<CarAppearance>().SetPlayerNumber(playerIndex); // do zastanowienia
-        car.GetComponent<PlayerController>().enabled = true;
+        car.GetComponent<PlayerController>().ActivateLocally();
         GameObject.FindObjectOfType<CameraController>().SetCameraToCar(car.transform.GetChild(0));
-        var backCam = car.transform.GetChild(0).Find("BackCamera");
-        backCam.gameObject.SetActive(true);
 
         //Master Client Setup
         if(PhotonNetwork.IsMasterClient)
@@ -57,5 +56,12 @@ public class PlayerSpawner : MonoBehaviour
         {
             waitingTextPanel.SetActive(true);
         }
+    }
+
+    internal void Respawn(CarAppearance c)
+    {
+        Transform car = c.transform.GetChild(0);
+        car.position = spawnPos[c.playerNumber].position;
+        car.rotation = spawnPos[c.playerNumber].rotation;
     }
 }

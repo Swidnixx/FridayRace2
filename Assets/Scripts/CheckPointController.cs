@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,4 +50,17 @@ public class CheckPointController : MonoBehaviour
         }
     }
 
+    int leaderboardId;
+    bool registered;
+    public void RegisterToLeaderboard(string playerName)
+    {
+        leaderboardId = Leaderboard.Register(playerName);
+        registered = true;
+    }
+
+    private void Update()
+    {
+        if (!registered) return;
+        Leaderboard.SetPosition(leaderboardId, lap, checkPoint);
+    }
 }

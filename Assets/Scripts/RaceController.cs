@@ -30,6 +30,7 @@ public class RaceController : MonoBehaviourPunCallbacks
     public void StartRaceButton()
     {
         photonView.RPC(nameof(StartRace), RpcTarget.All, null);
+        PhotonNetwork.CurrentRoom.IsOpen = false;
     }
 
     [PunRPC] //Zdalne uruchomienie procedury
@@ -89,6 +90,14 @@ public class RaceController : MonoBehaviourPunCallbacks
 
     public void RestartRace()
     {
-        SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+        foreach(var c in carsController)
+        {
+            var ca = c.GetComponentInParent<CarAppearance>();
+            if (ca.photonView.IsMine)
+            {
+                FindObjectOfType<PlayerSpawner>().Respawn(ca);
+            }
+        }
+        //SceneManager.LoadScene( SceneManager.GetActiveScene().name );
     }
 }

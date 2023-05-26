@@ -7,12 +7,14 @@ using UnityEngine;
 
 public class CarAppearance : MonoBehaviourPunCallbacks
 {
+    public CheckPointController ckpController;
+
     public TextMeshProUGUI nameText;
     public MeshRenderer carRenderer;
 
     string playerName = "Player";
     Color playerColor = Color.white;
-    int playerNumber;
+    public int playerNumber { get; private set; }
 
     private void Start()
     {
@@ -32,6 +34,9 @@ public class CarAppearance : MonoBehaviourPunCallbacks
         nameText.color = playerColor;
 
         carRenderer.material.color = playerColor;
+
+        //Register car for Leaderboard
+        ckpController.RegisterToLeaderboard(playerName);
     }
 
     public void SetPlayerNumber(int number)

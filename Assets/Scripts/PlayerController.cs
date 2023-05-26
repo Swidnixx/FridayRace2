@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public DrivingScript ds;
+    public DriveSupport dss;
+    public GameObject backCamera;
 
     private void Update()
     {
@@ -19,5 +22,13 @@ public class PlayerController : MonoBehaviour
         }
 
         ds.Drive(accel, steer, brake);
+    }
+
+    internal void ActivateLocally()
+    {
+        this.enabled = true;
+        ds.enabled = true;
+        dss.enabled = true;
+        backCamera.SetActive(true);
     }
 }
