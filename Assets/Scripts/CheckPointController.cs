@@ -63,4 +63,11 @@ public class CheckPointController : MonoBehaviour
         if (!registered) return;
         Leaderboard.SetPosition(leaderboardId, lap, checkPoint);
     }
+
+    public void Reset()
+    {
+        lap = 0;
+        checkPoint = 0;
+        nextPoint = 0;
+    }
 }

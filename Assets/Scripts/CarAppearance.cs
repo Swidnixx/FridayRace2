@@ -14,7 +14,6 @@ public class CarAppearance : MonoBehaviourPunCallbacks
 
     string playerName = "Player";
     Color playerColor = Color.white;
-    public int playerNumber { get; private set; }
 
     private void Start()
     {
@@ -37,10 +36,5 @@ public class CarAppearance : MonoBehaviourPunCallbacks
 
         //Register car for Leaderboard
         ckpController.RegisterToLeaderboard(playerName);
-    }
-
-    public void SetPlayerNumber(int number)
-    {
-        playerNumber = number;
     }
 }

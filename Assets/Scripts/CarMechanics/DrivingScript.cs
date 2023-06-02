@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,6 +83,14 @@ public class DrivingScript : MonoBehaviour
         {
             currentGear--;
             accelTime = gearChangeTime - 0.2f * gearChangeTime;
+        }
+    }
+
+    internal void StopWheels()
+    {
+        foreach( var w in wheels)
+        {
+            w.wheelCollider.brakeTorque = Mathf.Infinity;
         }
     }
 }

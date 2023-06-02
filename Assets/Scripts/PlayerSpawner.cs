@@ -12,6 +12,7 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject startRacePanel;
     public GameObject waitingTextPanel;
 
+    GameObject localPlayer;
     int playerIndex;
 
     private void Awake()
@@ -36,14 +37,13 @@ public class PlayerSpawner : MonoBehaviour
             PlayerPrefs.GetString("Nickname"),
             PlayerPrefs.GetFloat("R"),  PlayerPrefs.GetFloat("G"), PlayerPrefs.GetFloat("B")
         };
-        var car = PhotonNetwork.Instantiate(
+        var car = localPlayer = PhotonNetwork.Instantiate(
             carPrefab.name,
             spawnPos[playerIndex].position, spawnPos[playerIndex].rotation,
             0, instanceData
         );
 
         //Local Player Setup
-        car.GetComponent<CarAppearance>().SetPlayerNumber(playerIndex); // do zastanowienia
         car.GetComponent<PlayerController>().ActivateLocally();
         GameObject.FindObjectOfType<CameraController>().SetCameraToCar(car.transform.GetChild(0));
 
@@ -58,10 +58,23 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    internal void Respawn(CarAppearance c)
+    public void RespawnLocalPlayer()
     {
-        Transform car = c.transform.GetChild(0);
-        car.position = spawnPos[c.playerNumber].position;
-        car.rotation = spawnPos[c.playerNumber].rotation;
+        Transform car = localPlayer.transform.GetChild(0);
+        car.GetComponent<DrivingScript>().StopWheels();
+        var rb = car.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        car.position = spawnPos[playerIndex].position;
+        car.rotation = spawnPos[playerIndex].rotation;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startRacePanel.SetActive(true);
+        }
+        else
+        {
+            waitingTextPanel.SetActive(true);
+        }
     }
 }

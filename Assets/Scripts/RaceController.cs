@@ -36,6 +36,7 @@ public class RaceController : MonoBehaviourPunCallbacks
     [PunRPC] //Zdalne uruchomienie procedury
     private void StartRace()
     {
+        timer = 3;
         RaceStarted?.Invoke();
 
         startPanel.SetActive(true);
@@ -90,14 +91,17 @@ public class RaceController : MonoBehaviourPunCallbacks
 
     public void RestartRace()
     {
-        foreach(var c in carsController)
+        photonView.RPC(nameof(Restart), RpcTarget.All, null);
+    }
+
+    [PunRPC]
+    void Restart()
+    {
+        finishPanel.SetActive(false);
+        foreach (var c in carsController)
         {
-            var ca = c.GetComponentInParent<CarAppearance>();
-            if (ca.photonView.IsMine)
-            {
-                FindObjectOfType<PlayerSpawner>().Respawn(ca);
-            }
+            c.Reset();
         }
-        //SceneManager.LoadScene( SceneManager.GetActiveScene().name );
+        GetComponentInChildren<PlayerSpawner>().RespawnLocalPlayer();
     }
 }
