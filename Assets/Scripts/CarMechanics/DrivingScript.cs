@@ -34,7 +34,11 @@ public class DrivingScript : MonoBehaviour
 
         foreach( var w in wheels )
         {
-            w.wheelCollider.motorTorque = accel * motorTorque;
+            if (w.frontWheel || !frontDrive)
+            {
+                w.wheelCollider.motorTorque = accel * motorTorque; 
+            }
+
             w.wheelCollider.brakeTorque = brake * brakeTorque;
 
             if(w.frontWheel)
@@ -52,6 +56,8 @@ public class DrivingScript : MonoBehaviour
 
     float accelTime;
     int currentGear = 1;
+    public bool frontDrive;
+
     void EngineSound(float accel)
     {
         if (speed < 15)

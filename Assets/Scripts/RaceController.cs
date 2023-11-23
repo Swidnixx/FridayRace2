@@ -76,7 +76,7 @@ public class RaceController : MonoBehaviourPunCallbacks
         int finishers = 0;
         foreach (CheckPointController controller in carsController)
         {
-            if (controller.Lap == totalLaps + 1)
+            if (controller.Lap >= totalLaps + 1)
             {
                 finishers++;
             }
